@@ -1,0 +1,161 @@
+/*Calculator app using React
+  Created by Raymond Wu
+  */
+class Calculator extends React.Component{
+  constructor(props){
+    super(props);
+    this.state ={
+      total: '0',
+      val: '0',
+      operation: null
+    };
+    this.handleNumber = this.handleNumber.bind(this);
+    this.handleOperator = this.handleOperator.bind(this);
+    this.handleReset = this.handleReset.bind(this);
+    this.handleDecimal = this.handleDecimal.bind(this);
+    this.handleNegative = this.handleNegative.bind(this);
+    this.handlePercent = this.handlePercent.bind(this);
+    this.handleEquals = this.handleEquals.bind(this);
+  }
+  
+  //Returns the evaluated expression
+  calculate(){
+    return (Math.round(100000000*eval(this.state.total + this.state.operation + this.state.val))/ 100000000).toString();
+  }
+  
+  //Event handler for numbers
+  handleNumber(e){
+     this.setState({
+        val: this.state.val=='0' || this.state.val=='' ? e.target.value : this.state.val + e.target.value
+      });
+  }
+  
+  //Event handler for the operators
+  handleOperator(e){
+    //If value is empty, only set the operation to the operator
+    if (this.state.val===''){
+      this.setState({
+        operation: e.target.value
+      });
+    }
+    //If operation is not empty, evaluate the expression and set value to an empty string
+    else if(this.state.operation !=null){
+      this.setState({
+        operation : e.target.value,
+        total: this.calculate(),
+        val: ''
+      })
+    }
+    // Set the operation and total to the current value
+    else{
+      this.setState({
+        operation: e.target.value,
+        total: this.state.val,
+        val: ''
+      });
+    }
+  };
+  
+  //Event handler for the AC button
+  handleReset(){
+    this.setState({
+      total: '0',
+      val: '0',
+      operation: null
+    });
+  };
+  
+  //Event handler for the decimal button
+  handleDecimal(){
+    if(!this.state.val.includes('.')){
+      this.setState({
+        val: this.state.val + '.'
+      });
+    }
+  };
+  
+  //Event handler for the percent button
+  handlePercent(){
+    if (this.state.val!==0){
+      this.setState({
+        val: (Number(this.state.val)/100).toString()
+      });
+    }
+  };
+  
+  //Event handler for the +/- button
+  handleNegative(){
+    if(this.state.val > 0){
+      this.setState({
+        val: -Math.abs(this.state.val)
+      });
+    }
+    else{
+      this.setState({
+        val: Math.abs(this.state.val)
+      });
+    }
+  };
+  
+  //Event handler for the equals button
+  handleEquals(){
+    this.setState({
+      total: this.calculate(),
+      val: this.calculate(),
+      operation: null
+    })
+  };
+  
+  render () {
+    return <div className="screen">
+      <Display val={this.state.val? this.state.val:this.state.total}/>
+      <ButtonPanel 
+        reset={this.handleReset}
+        operator={this.handleOperator}
+        number={this.handleNumber}
+        decimal={this.handleDecimal}
+        percent={this.handlePercent}
+        equals={this.handleEquals}
+        negative={this.handleNegative}/>
+    </div>;
+  }
+};
+
+/* Displays all the buttons for the calculator
+*/
+class ButtonPanel extends React.Component{
+  render(){
+    return <div className='buttonPanel'>
+      <button id="clear" className="otherButton" value='AC' onClick={this.props.reset}>AC</button>
+      <button id="negative" className="otherButton" onClick={this.props.negative}>+/-</button>
+      <button id="percent" className="otherButton"value="%" onClick={this.props.percent}>%</button>
+      <button id="divide" className="operator" value="/" onClick={this.props.operator}>&divide;</button>
+      <button id="seven" value="7" onClick={this.props.number} >7</button>
+      <button id="eight" value="8" onClick={this.props.number} >8</button>        
+      <button id="nine" value="9" onClick={this.props.number} >9</button>
+      <button id="multiply" className="operator" value="*" onClick={this.props.operator}>&times;</button>
+      <button id="four" value="4" onClick={this.props.number} >4</button>
+      <button id="five" value="5" onClick={this.props.number} >5</button>
+      <button id="six" value="6" onClick={this.props.number} >6</button>
+      <button id="subtract" className="operator" value="-" onClick={this.props.operator}>-</button>
+      <button id="one" value="1" onClick={this.props.number} >1</button>
+      <button id="two" value="2" onClick={this.props.number} >2</button>
+      <button id="three" value="3" onClick={this.props.number} >3</button>
+      <button id="add" className="operator" value="+" onClick={this.props.operator}>+</button>
+      <button id="zero" value="0" onClick={this.props.number} >0</button>
+      <button id="decimal" value="." onClick={this.props.decimal}>.</button>
+      <button id="equals" className="equalsButton" value="=" onClick={this.props.equals}>=</button>
+     </div>;
+  }
+};
+
+/* Displays the output of the values 
+*/
+class Display extends React.Component {
+  render(){
+    return <div id='display' className="output">{this.props.val}</div>
+  }
+}
+
+//Renders the application
+ReactDOM.render(<Calculator />, document.getElementById('app'));

@@ -1,0 +1,60 @@
+html, body{
+  background-color: gray;
+  text-align: center;
+}
+#app {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.screen{
+  background-color: black;
+}
+
+.output{
+  width: 100%;
+  font-size: 40px;
+  height: 80px;
+  border: none;
+  color: #fff;
+  text-align: right;
+  padding:20px;
+}
+
+button{
+  border: none;
+  font-size: 22px;
+  cursor: default;
+  background: #545454;
+  color: white;
+  height: 50px;
+  width: 50px;
+}
+
+button:hover {
+    background-color: white;
+    color: black;
+}
+
+.buttonPanel{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap:10px;
+  padding: 10px;
+}
+
+.operator{
+  background: #008A9A;
+}
+
+.otherButton{
+  background: #8D8D8D;
+  color: black;
+}
+.equalsButton{
+  background: #CD7401;
+  width:100%;
+  grid-column-start: 3;
+  grid-column-end: 5;
+}
